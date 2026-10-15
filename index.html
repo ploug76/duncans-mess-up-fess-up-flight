@@ -1,0 +1,65 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Duncan's Flight to Heaven</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#123;touch-action:none;font-family:Georgia,serif}canvas{display:block;width:100vw;height:100vh}
+#fb{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);padding:16px 38px;font:bold 22px Georgia;color:#5a3b00;background:linear-gradient(#fff6c8,#f2c94c);border:3px solid #fff;border-radius:40px;box-shadow:0 0 25px #ffe9a0;white-space:nowrap;user-select:none;-webkit-user-select:none}</style></head><body>
+<canvas id="c"></canvas><div id="fb">🙏 Forgiveness</div>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');let W,H,S;
+function rs(){W=c.width=innerWidth*devicePixelRatio;H=c.height=innerHeight*devicePixelRatio;S=H/800}addEventListener('resize',rs);rs();
+const LBL=['LAW','RULES','Thou Shalt...','Statute','Code','Decree','Edict','Ordinance','Bylaws','Thou Shalt Not'];
+const COL=['#7a2e2e','#2e4a7a','#3d6b3a','#6b4a2a','#4a2e6b','#6b2e55'];
+let best=+localStorage.getItem('angelBest')||1;
+let q=new URLSearchParams(location.search).get('level');let level=q?Math.max(1,Math.min(99,+q)):best;
+let state='title',a,obs,passed,need,spawnT,heaven,parts=[],t=0,msgT=0,endT=0,lvlMsg='';
+const clouds=[...Array(8)].map(()=>({x:Math.random(),y:Math.random()*.8,s:.5+Math.random()}));
+function P(){const L=level-1;return{sp:(2.6+L*.045)*S,gap:Math.max(150,260-L*1.1)*S,need:3+Math.floor(L/4),int:Math.max(70,110-L*.4)}}
+function reset(){a={x:W*.28,y:H*.45,v:0};obs=[];passed=0;need=P().need;spawnT=0;heaven=null;msgT=90}
+let ac;function choir(){try{ac=ac||new(window.AudioContext||webkitAudioContext)();if(ac.state=='suspended')ac.resume();
+const n=ac.currentTime,m=ac.createGain();m.gain.setValueAtTime(0,n);m.gain.linearRampToValueAtTime(.18,n+.08);m.gain.exponentialRampToValueAtTime(.001,n+1.1);
+const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=800;f.Q.value=1.2;f.connect(m);m.connect(ac.destination);
+[261.6,329.6,392,523.3,659.3].forEach((fr,i)=>{[-4,4].forEach(d=>{const o=ac.createOscillator();o.type=i%2?'sine':'triangle';o.frequency.value=fr;o.detune.value=d;
+const v=ac.createOscillator(),vg=ac.createGain();v.frequency.value=5.5;vg.gain.value=6;v.connect(vg);vg.connect(o.detune);o.connect(f);o.start(n);v.start(n);o.stop(n+1.2);v.stop(n+1.2)})})}catch(e){}}
+function tap(e){if(e)e.preventDefault();choir();
+if(state=='title'){state='play';reset();return}
+if(state=='dead'){if(msgT<=0){state='play';reset()}return}
+if(state=='play')a.v=-8.5*S}
+addEventListener('pointerdown',tap,{passive:false});addEventListener('keydown',e=>{if(e.code=='Space')tap(e)});
+function book(px,py,w,h,col,lab){x.fillStyle=col;x.fillRect(px,py,w,h);x.fillStyle='#f3e9d2';x.fillRect(px+w-6*S,py+3*S,5*S,h-6*S);
+x.fillStyle='#e8c66a';x.fillRect(px,py+4*S,w,2*S);x.fillRect(px,py+h-6*S,w,2*S);x.fillStyle='#fff3c4';x.font=`bold ${Math.min(h*.5,15*S)}px Georgia`;x.textAlign='center';x.textBaseline='middle';
+x.fillText(lab,px+w/2-3*S,py+h/2,w-12*S)}
+function pillar(o){const bh=34*S;for(let y=o.top-bh,i=0;y>-bh;y-=bh,i++)book(o.x+((i*7)%3-1)*4*S,y,o.w,bh-2*S,COL[(o.s+i)%6],LBL[(o.s+i)%LBL.length]);
+for(let y=o.top+o.gap,i=0;y<H;y+=bh,i++)book(o.x+((i*5)%3-1)*4*S,y,o.w,bh-2*S,COL[(o.s+i+3)%6],LBL[(o.s+i+4)%LBL.length])}
+function angel(px,py,al){x.save();x.globalAlpha=al;x.translate(px,py);x.rotate(Math.max(-.4,Math.min(.5,(a&&a.v||0)/(20*S))));const s=S,fl=Math.sin(t*.4)*.5;
+x.fillStyle='#fff';x.strokeStyle='#d8e4ff';x.lineWidth=2*s;for(const d of[-1,1]){x.beginPath();x.ellipse(d*14*s,-4*s,20*s,9*s,d*(-.6+fl),0,7);x.fill();x.stroke()}
+x.fillStyle='#fffdf5';x.beginPath();x.moveTo(-10*s,0);x.lineTo(10*s,0);x.lineTo(14*s,24*s);x.lineTo(-14*s,24*s);x.fill();
+x.fillStyle='#ffe0c2';x.beginPath();x.arc(0,-8*s,10*s,0,7);x.fill();x.fillStyle='#f4c542';x.beginPath();x.arc(0,-12*s,10*s,Math.PI,0);x.fill();
+x.fillStyle='#333';x.fillRect(-4*s,-8*s,2*s,2*s);x.fillRect(3*s,-8*s,2*s,2*s);x.strokeStyle='#ffd700';x.lineWidth=3*s;x.shadowColor='#fff38a';x.shadowBlur=15*s;
+x.beginPath();x.ellipse(0,-26*s,11*s,4*s,0,0,7);x.stroke();x.restore()}
+function sky(){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,state=='end'?'#fff8dc':'#7fb3ff');g.addColorStop(.6,'#ffd6ec');g.addColorStop(1,'#fff3c4');x.fillStyle=g;x.fillRect(0,0,W,H);
+x.fillStyle='rgba(255,255,255,.8)';for(const cl of clouds){cl.x-=.0004*cl.s;if(cl.x<-.3)cl.x=1.2;const cx=cl.x*W,cy=cl.y*H,r=30*S*cl.s;for(let i=0;i<4;i++){x.beginPath();x.arc(cx+i*r*.8,cy+(i%2)*r*.3,r,0,7);x.fill()}}}
+function txt(s,y,sz,col){x.font=`bold ${sz*S}px Georgia`;x.textAlign='center';x.textBaseline='middle';x.lineWidth=5*S;x.strokeStyle='rgba(80,50,0,.6)';x.strokeText(s,W/2,y,W*.95);x.fillStyle=col||'#fff8d0';x.fillText(s,W/2,y,W*.95)}
+function heavenBook(h){x.save();x.translate(h.x,h.y);x.shadowColor='#ffe066';x.shadowBlur=40*S+10*S*Math.sin(t*.1);x.fillStyle='#f5c518';x.fillRect(-30*S,-38*S,60*S,76*S);x.shadowBlur=0;x.fillStyle='#fff6c0';x.fillRect(-24*S,-30*S,48*S,60*S);
+x.fillStyle='#b8860b';x.fillRect(-3*S,-20*S,6*S,36*S);x.fillRect(-12*S,-10*S,24*S,6*S);x.font=`bold ${9*S}px Georgia`;x.textAlign='center';x.fillText('BOOK OF',0,20*S);x.fillText('HEAVEN',0,29*S);x.restore()}
+function die(){state='dead';msgT=40;for(let i=0;i<20;i++)parts.push({x:a.x,y:a.y,vx:(Math.random()-.5)*6*S,vy:(Math.random()-.5)*6*S,l:60,c:'#fff'})}
+function step(){t++;sky();const p=P();
+if(state=='title'){angel(W/2,H*.42+Math.sin(t*.05)*10*S,1);txt("Duncan's Flight to Heaven",H*.2,32);txt('Help Duncan fly through the laws & rules',H*.28,17);txt('and find the Book of Heaven',H*.32,17);txt('Tap to begin — Level '+level+' / 99',H*.6,22);}
+else if(state=='play'||state=='dead'){
+if(state=='play'){a.v+=.42*S;a.y+=a.v;
+if(passed+obs.length<need&&--spawnT<=0){spawnT=p.int;const gap=p.gap;obs.push({x:W,w:70*S,gap,top:H*.12+Math.random()*(H*.76-gap),s:Math.floor(Math.random()*9),done:0})}
+if(passed>=need&&!obs.length&&!heaven)heaven={x:W+40*S,y:H*.3+Math.random()*H*.4};
+for(const o of obs){o.x-=p.sp;if(!o.done&&o.x+o.w<a.x){o.done=1;passed++}
+if(state=='play'&&a.x+12*S>o.x&&a.x-12*S<o.x+o.w&&(a.y-14*S<o.top||a.y+20*S>o.top+o.gap))die()}
+obs=obs.filter(o=>o.x>-o.w-20*S);if(state=='play'&&(a.y>H||a.y<-40*S))die();
+if(heaven&&state=='play'){heaven.x-=p.sp*.8;if(heaven.x<-50*S)heaven.x=W+40*S;if(Math.hypot(heaven.x-a.x,heaven.y-a.y)<45*S){for(let i=0;i<40;i++)parts.push({x:heaven.x,y:heaven.y,vx:(Math.random()-.5)*8*S,vy:(Math.random()-.5)*8*S,l:70,c:'#ffd700'});
+if(level>=99){state='end';endT=0;a.x=W/2;a.y=H*.7;a.v=0}else{level++;if(level>best){best=level;localStorage.setItem('angelBest',best)}reset();lvlMsg='Duncan found the Book of Heaven!'}}}}
+obs.forEach(pillar);if(heaven)heavenBook(heaven);if(state=='play')angel(a.x,a.y,1);
+txt('Level '+level+' / 99',40*S,22);txt(heaven?'Catch the Book of Heaven!':`Books passed ${passed} / ${need}`,72*S,15);
+if(state=='play'&&msgT-->0){txt('Level '+level,H*.45,40);if(lvlMsg)txt(lvlMsg,H*.52,18)}
+if(state=='dead'){msgT--;txt('The law caught Duncan…',H*.4,28);txt(msgT>0?'':'Tap Forgiveness to try again',H*.48,20)}}
+else if(state=='end'){endT++;const al=Math.max(0,1-Math.max(0,endT-200)/120);a.y-=1.2*S;if(al>0)angel(a.x,a.y,al);
+x.fillStyle='rgba(255,250,210,'+Math.min(.6,endT/400)+')';x.beginPath();x.moveTo(W*.35,0);x.lineTo(W*.65,0);x.lineTo(W*.55,H);x.lineTo(W*.45,H);x.fill();
+if(endT>180&&endT<360)for(let i=0;i<6;i++)parts.push({x:a.x+(Math.random()-.5)*30*S,y:a.y+(Math.random()-.5)*40*S,vx:(Math.random()-.5)*S,vy:-(1+Math.random()*3)*S,l:150,c:Math.random()<.5?'#ffd700':'#fff3a0',str:1});
+if(endT>380){txt('Duncan is forgiven.',H*.4,34);txt('Welcome home, Duncan.',H*.48,22);txt('All 99 levels complete ✨',H*.55,18)}}
+for(const q of parts){q.x+=q.vx;q.y+=q.vy;q.l--;x.globalAlpha=Math.max(0,q.l/100);x.fillStyle=x.strokeStyle=q.c;if(q.str){x.lineWidth=1.5*S;x.beginPath();x.moveTo(q.x,q.y);x.lineTo(q.x-q.vx*4,q.y-q.vy*6);x.stroke()}else x.fillRect(q.x,q.y,3*S,3*S)}
+x.globalAlpha=1;parts=parts.filter(q=>q.l>0);requestAnimationFrame(step)}
+step();
+</script></body></html>
