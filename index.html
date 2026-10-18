@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Duncan's Flight to Heaven</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#123;touch-action:none;font-family:Georgia,serif}canvas{display:block;width:100vw;height:100vh}
+<title>Duncan's Mess Up Fess Up Flight</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#123;touch-action:none;font-family:Georgia,serif}canvas{display:block;width:100vw;height:100vh}
 #fb{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);padding:16px 38px;font:bold 22px Georgia;color:#5a3b00;background:linear-gradient(#fff6c8,#f2c94c);border:3px solid #fff;border-radius:40px;box-shadow:0 0 25px #ffe9a0;white-space:nowrap;user-select:none;-webkit-user-select:none}</style></head><body>
 <canvas id="c"></canvas><div id="fb">🙏 Forgiveness</div>
 <script>
@@ -73,12 +73,12 @@ x.strokeStyle='#ffd700';x.lineWidth=3*s;x.shadowColor='#fff38a';x.shadowBlur=15*
 x.beginPath();x.ellipse(0,-26*s,11*s,4*s,0,0,7);x.stroke();x.restore()}
 function sky(){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,state=='end'?'#fff8dc':'#7fb3ff');g.addColorStop(.6,'#ffd6ec');g.addColorStop(1,'#fff3c4');x.fillStyle=g;x.fillRect(0,0,W,H);
 x.fillStyle='rgba(255,255,255,.8)';for(const cl of clouds){cl.x-=.0004*cl.s;if(cl.x<-.3)cl.x=1.2;const cx=cl.x*W,cy=cl.y*H,r=30*S*cl.s;for(let i=0;i<4;i++){x.beginPath();x.arc(cx+i*r*.8,cy+(i%2)*r*.3,r,0,7);x.fill()}}}
-function txt(s,y,sz,col){x.font=`bold ${sz*S}px Georgia`;x.textAlign='center';x.textBaseline='middle';x.lineWidth=5*S;x.strokeStyle='rgba(80,50,0,.6)';x.strokeText(s,W/2,y,W*.95);x.fillStyle=col||'#fff8d0';x.fillText(s,W/2,y,W*.95)}
+function txt(s,y,sz,col){x.lineJoin='round';x.font=`bold ${sz*S}px Georgia`;x.textAlign='center';x.textBaseline='middle';x.lineWidth=5*S;x.strokeStyle='rgba(80,50,0,.6)';x.strokeText(s,W/2,y,W*.95);x.fillStyle=col||'#fff8d0';x.fillText(s,W/2,y,W*.95)}
 function heavenBook(h){x.save();x.translate(h.x,h.y);x.shadowColor='#ffe066';x.shadowBlur=40*S+10*S*Math.sin(t*.1);x.fillStyle='#f5c518';x.fillRect(-30*S,-38*S,60*S,76*S);x.shadowBlur=0;x.fillStyle='#fff6c0';x.fillRect(-24*S,-30*S,48*S,60*S);
 x.fillStyle='#b8860b';x.fillRect(-3*S,-20*S,6*S,36*S);x.fillRect(-12*S,-10*S,24*S,6*S);x.font=`bold ${9*S}px Georgia`;x.textAlign='center';x.fillText('BOOK OF',0,20*S);x.fillText('HEAVEN',0,29*S);x.restore()}
 function die(){state='dead';msgT=40;for(let i=0;i<20;i++)parts.push({x:a.x,y:a.y,vx:(Math.random()-.5)*6*S,vy:(Math.random()-.5)*6*S,l:60,c:'#fff'})}
 function step(){t++;sky();const p=P();
-if(state=='title'){angel(W/2,H*.42+Math.sin(t*.05)*10*S,1);txt("Duncan's Flight to Heaven",H*.2,32);txt('Help Duncan fly through the laws & rules',H*.28,17);txt('and find the Book of Heaven',H*.32,17);txt('Tap to begin — Level '+level+' / 99',H*.6,22);}
+if(state=='title'){angel(W/2,H*.42+Math.sin(t*.05)*10*S,1);txt("Duncan's Mess Up",H*.15,32);txt("Fess Up Flight",H*.2,32);txt('Help Duncan fly through the laws & rules',H*.28,17);txt('and find the Book of Heaven',H*.32,17);txt('Tap to begin — Level '+level+' / 99',H*.6,22);}
 else if(state=='play'||state=='dead'){
 if(state=='play'){a.v+=.42*S;a.y+=a.v;
 if(passed+obs.length<need&&--spawnT<=0){spawnT=p.int;const gap=p.gap;obs.push({x:W,w:70*S,gap,top:H*.12+Math.random()*(H*.76-gap),s:Math.floor(Math.random()*9),done:0})}
