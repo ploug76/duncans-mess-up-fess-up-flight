@@ -1,7 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Duncan's Mess Up Fess Up Flight</title><!--og--><meta name="description" content="Fly Duncan the angel through 99 levels of laws &amp; rules — mess up, fess up, and find the Book of Heaven!"><meta property="og:type" content="website"><meta property="og:site_name" content="Peter&#x27;s Arcade"><meta property="og:title" content="Duncan&#x27;s Mess Up Fess Up Flight"><meta property="og:description" content="Fly Duncan the angel through 99 levels of laws &amp; rules — mess up, fess up, and find the Book of Heaven!"><meta property="og:url" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/"><meta property="og:image" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/cover.png"><meta property="og:image:secure_url" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/cover.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Duncan&#x27;s Mess Up Fess Up Flight 8-bit game box cover"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Duncan&#x27;s Mess Up Fess Up Flight"><meta name="twitter:description" content="Fly Duncan the angel through 99 levels of laws &amp; rules — mess up, fess up, and find the Book of Heaven!"><meta name="twitter:image" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/cover.png"><!--/og--><style>html,body{margin:0;height:100%;overflow:hidden;background:#123;touch-action:none;font-family:Georgia,serif}canvas{display:block;width:100vw;height:100vh}
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#7fb3ff"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<title>Duncan's Mess Up Fess Up Flight</title><!--og--><meta name="description" content="Fly Duncan the angel through 99 levels of laws &amp; rules — mess up, fess up, and find the Book of Heaven!"><meta property="og:type" content="website"><meta property="og:site_name" content="Peter&#x27;s Arcade"><meta property="og:title" content="Duncan&#x27;s Mess Up Fess Up Flight"><meta property="og:description" content="Fly Duncan the angel through 99 levels of laws &amp; rules — mess up, fess up, and find the Book of Heaven!"><meta property="og:url" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/"><meta property="og:image" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/cover.png"><meta property="og:image:secure_url" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/cover.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Duncan&#x27;s Mess Up Fess Up Flight 8-bit game box cover"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Duncan&#x27;s Mess Up Fess Up Flight"><meta name="twitter:description" content="Fly Duncan the angel through 99 levels of laws &amp; rules — mess up, fess up, and find the Book of Heaven!"><meta name="twitter:image" content="https://ploug76.github.io/duncans-mess-up-fess-up-flight/cover.png"><!--/og--><style>html,body{margin:0;height:100%;overflow:hidden;background:#123;touch-action:none;font-family:Georgia,serif}canvas{display:block;position:fixed;left:0;top:0;width:100%;height:100%}
+.tb{position:fixed;top:calc(8px + env(safe-area-inset-top));width:46px;height:46px;border-radius:50%;border:3px solid #fff;background:rgba(90,59,0,.55);color:#fff;font-size:20px;padding:0;z-index:5;touch-action:manipulation}#pz{right:8px;display:none}#mu{right:62px}#inst{position:fixed;left:50%;bottom:calc(5vh + 78px);transform:translateX(-50%);display:none;z-index:6;font:bold 17px Georgia;padding:10px 20px;border-radius:30px;border:3px solid #fff;background:#5a3b00;color:#fff}
 #fb{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);padding:16px 38px;font:bold 22px Georgia;color:#5a3b00;background:linear-gradient(#fff6c8,#f2c94c);border:3px solid #fff;border-radius:40px;box-shadow:0 0 25px #ffe9a0;white-space:nowrap;user-select:none;-webkit-user-select:none}</style></head><body>
-<canvas id="c"></canvas><div id="fb">🙏 Forgiveness</div>
+<canvas id="c"></canvas><div id="fb">🙏 Forgiveness</div><button id="pz" class="tb" aria-label="Pause">⏸</button><button id="mu" class="tb" aria-label="Sound">🔊</button><button id="inst">📲 Install app</button>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d');let W,H,S;
 function rs(){W=c.width=innerWidth*devicePixelRatio;H=c.height=innerHeight*devicePixelRatio;S=H/800}addEventListener('resize',rs);rs();
@@ -13,16 +14,17 @@ let state='title',a,obs,passed,need,spawnT,heaven,parts=[],t=0,msgT=0,endT=0,lvl
 const clouds=[...Array(8)].map(()=>({x:Math.random(),y:Math.random()*.8,s:.5+Math.random()}));
 function P(){const L=level-1;return{sp:(2.6+L*.045)*S,gap:Math.max(150,260-L*1.1)*S,need:3+Math.floor(L/4),int:Math.max(70,110-L*.4)}}
 function reset(){a={x:W*.28,y:H*.45,v:0};obs=[];passed=0;need=P().need;spawnT=0;heaven=null;msgT=90}
-let ac;function choir(){try{ac=ac||new(window.AudioContext||webkitAudioContext)();if(ac.state=='suspended')ac.resume();
+let paused=false,muted=localStorage.getItem('angelMute')=='1',dp=null;
+let ac;function choir(){if(muted)return;try{ac=ac||new(window.AudioContext||webkitAudioContext)();if(ac.state=='suspended')ac.resume();
 const n=ac.currentTime,m=ac.createGain();m.gain.setValueAtTime(0,n);m.gain.linearRampToValueAtTime(.18,n+.08);m.gain.exponentialRampToValueAtTime(.001,n+1.1);
 const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=800;f.Q.value=1.2;f.connect(m);m.connect(ac.destination);
 [261.6,329.6,392,523.3,659.3].forEach((fr,i)=>{[-4,4].forEach(d=>{const o=ac.createOscillator();o.type=i%2?'sine':'triangle';o.frequency.value=fr;o.detune.value=d;
 const v=ac.createOscillator(),vg=ac.createGain();v.frequency.value=5.5;vg.gain.value=6;v.connect(vg);vg.connect(o.detune);o.connect(f);o.start(n);v.start(n);o.stop(n+1.2);v.stop(n+1.2)})})}catch(e){}}
-function tap(e){if(e)e.preventDefault();choir();
-if(state=='title'){state='play';reset();return}
-if(state=='dead'){if(msgT<=0){state='play';reset()}return}
+function tap(e){if(e&&e.target&&e.target.closest&&e.target.closest('button'))return;if(e)e.preventDefault();if(paused){togglePause();return}choir();
+if(state=='title'){state='play';reset();ui();return}
+if(state=='dead'){if(msgT<=0){state='play';reset();ui()}return}
 if(state=='play')a.v=-8.5*S}
-addEventListener('pointerdown',tap,{passive:false});addEventListener('keydown',e=>{if(e.code=='Space')tap(e)});
+addEventListener('pointerdown',tap,{passive:false});addEventListener('keydown',e=>{if(e.code=='Space')tap(e);else if(e.code=='KeyP'&&state=='play')togglePause()});
 function book(px,py,w,h,col,lab){x.fillStyle=col;x.fillRect(px,py,w,h);x.fillStyle='#f3e9d2';x.fillRect(px+w-6*S,py+3*S,5*S,h-6*S);
 x.fillStyle='#e8c66a';x.fillRect(px,py+4*S,w,2*S);x.fillRect(px,py+h-6*S,w,2*S);x.fillStyle='#fff3c4';x.font=`bold ${Math.min(h*.5,15*S)}px Georgia`;x.textAlign='center';x.textBaseline='middle';
 x.fillText(lab,px+w/2-3*S,py+h/2,w-12*S)}
@@ -76,7 +78,7 @@ x.fillStyle='rgba(255,255,255,.8)';for(const cl of clouds){cl.x-=.0004*cl.s;if(c
 function txt(s,y,sz,col){x.lineJoin='round';x.font=`bold ${sz*S}px Georgia`;x.textAlign='center';x.textBaseline='middle';x.lineWidth=5*S;x.strokeStyle='rgba(80,50,0,.6)';x.strokeText(s,W/2,y,W*.95);x.fillStyle=col||'#fff8d0';x.fillText(s,W/2,y,W*.95)}
 function heavenBook(h){x.save();x.translate(h.x,h.y);x.shadowColor='#ffe066';x.shadowBlur=40*S+10*S*Math.sin(t*.1);x.fillStyle='#f5c518';x.fillRect(-30*S,-38*S,60*S,76*S);x.shadowBlur=0;x.fillStyle='#fff6c0';x.fillRect(-24*S,-30*S,48*S,60*S);
 x.fillStyle='#b8860b';x.fillRect(-3*S,-20*S,6*S,36*S);x.fillRect(-12*S,-10*S,24*S,6*S);x.font=`bold ${9*S}px Georgia`;x.textAlign='center';x.fillText('BOOK OF',0,20*S);x.fillText('HEAVEN',0,29*S);x.restore()}
-function die(){state='dead';msgT=40;for(let i=0;i<20;i++)parts.push({x:a.x,y:a.y,vx:(Math.random()-.5)*6*S,vy:(Math.random()-.5)*6*S,l:60,c:'#fff'})}
+function die(){state='dead';ui();msgT=40;for(let i=0;i<20;i++)parts.push({x:a.x,y:a.y,vx:(Math.random()-.5)*6*S,vy:(Math.random()-.5)*6*S,l:60,c:'#fff'})}
 function step(){t++;sky();const p=P();
 if(state=='title'){angel(W/2,H*.42+Math.sin(t*.05)*10*S,1);txt("Duncan's Mess Up",H*.15,32);txt("Fess Up Flight",H*.2,32);txt('Help Duncan fly through the laws & rules',H*.28,17);txt('and find the Book of Heaven',H*.32,17);txt('Tap to begin — Level '+level+' / 99',H*.6,22);}
 else if(state=='play'||state=='dead'){
@@ -97,6 +99,18 @@ x.fillStyle='rgba(255,250,210,'+Math.min(.6,endT/400)+')';x.beginPath();x.moveTo
 if(endT>180&&endT<360)for(let i=0;i<6;i++)parts.push({x:a.x+(Math.random()-.5)*30*S,y:a.y+(Math.random()-.5)*40*S,vx:(Math.random()-.5)*S,vy:-(1+Math.random()*3)*S,l:150,c:Math.random()<.5?'#ffd700':'#fff3a0',str:1});
 if(endT>380){txt('Duncan is forgiven.',H*.4,34);txt('Welcome home, Duncan.',H*.48,22);txt('All 99 levels complete ✨',H*.55,18)}}
 for(const q of parts){q.x+=q.vx;q.y+=q.vy;q.l--;x.globalAlpha=Math.max(0,q.l/100);x.fillStyle=x.strokeStyle=q.c;if(q.str){x.lineWidth=1.5*S;x.beginPath();x.moveTo(q.x,q.y);x.lineTo(q.x-q.vx*4,q.y-q.vy*6);x.stroke()}else x.fillRect(q.x,q.y,3*S,3*S)}
-x.globalAlpha=1;parts=parts.filter(q=>q.l>0);requestAnimationFrame(step)}
-step();
+x.globalAlpha=1;parts=parts.filter(q=>q.l>0)}
+function pauseOverlay(){x.fillStyle='rgba(20,30,60,.5)';x.fillRect(0,0,W,H);txt('Paused',H*.42,40);txt('Tap to keep going',H*.5,20)}
+function togglePause(){if(state!='play'&&!paused)return;paused=!paused;ui();if(paused)pauseOverlay()}
+function ui(){$('pz').style.display=state=='play'?'block':'none';$('pz').textContent=paused?'▶':'⏸';$('mu').textContent=muted?'🔇':'🔊';$('inst').style.display=state=='title'&&dp?'block':'none'}
+const $=id=>document.getElementById(id);
+['pointerdown','touchstart'].forEach(ev=>['pz','mu','inst'].forEach(k=>$(k).addEventListener(ev,e=>e.stopPropagation(),{passive:true})));
+$('pz').onclick=e=>{e.stopPropagation();togglePause()};
+$('mu').onclick=e=>{e.stopPropagation();muted=!muted;localStorage.setItem('angelMute',muted?'1':'0');if(!muted)choir();ui()};
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;ui()});$('inst').onclick=e=>{e.stopPropagation();if(dp){dp.prompt();dp=null;ui()}};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state=='play'&&!paused)togglePause()});
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js');
+// fixed 60 Hz game speed so Duncan flies the same on 60/90/120 Hz screens
+let lastF=performance.now(),accF=0;function drive(now){requestAnimationFrame(drive);accF+=Math.min(100,now-lastF);lastF=now;if(paused){accF=0;return}let n=0;while(accF>=15.2&&n<4){step();accF-=1000/60;n++}if(accF<-8)accF=-8}
+ui();step();requestAnimationFrame(drive);
 </script></body></html>
